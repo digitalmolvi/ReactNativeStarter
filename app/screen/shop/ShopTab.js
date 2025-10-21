@@ -34,7 +34,6 @@ const ShopTab = () => {
 
   return (
     <Drawer.Navigator
-      // 🚫 Removed useLegacyImplementation — not supported in Reanimated 3+
       screenOptions={{
         headerStyle: { backgroundColor: 'purple' },
         headerTintColor: 'white',
