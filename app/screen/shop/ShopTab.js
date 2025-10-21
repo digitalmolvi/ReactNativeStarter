@@ -1,51 +1,70 @@
-import { View, Text } from 'react-native'
-import { createDrawerNavigator } from '@react-navigation/drawer'
-import HomeScreen from './HomeScreen';
+import React, { useEffect, useState } from 'react';
+import { Text } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import HomeScreen from './HomeScreen';
 import { getToken } from '../../../services/AsyncStorageService';
-import { useEffect, useState } from 'react';
+
 const Drawer = createDrawerNavigator();
+
 const ShopTab = () => {
-  const navigation = useNavigation()
-  const [usertoken, setUserToken] = useState({})
+  const navigation = useNavigation();
+  const [userToken, setUserToken] = useState({});
 
   useEffect(() => {
     (async () => {
-      const token = await getToken()
+      const token = await getToken();
       if (token) {
-        const { access, refresh } = JSON.parse(token)
-        setUserToken({
-          "access": access,
-          "refresh": refresh
-        })
+        const { access, refresh } = JSON.parse(token);
+        setUserToken({ access, refresh });
       } else {
-        setUserToken({})
+        setUserToken({});
       }
     })();
-  }, [])
+  }, []);
 
   const handleUserAuth = () => {
-    if (usertoken.access) {
-      navigation.navigate('UserPanelTab', { screen: 'Dashboard' })
+    if (userToken.access) {
+      navigation.navigate('UserPanelTab', { screen: 'Dashboard' });
     } else {
-      navigation.navigate('UserLogin')
+      navigation.navigate('UserLogin');
     }
-  }
+  };
 
   return (
-    <Drawer.Navigator screenOptions={{ headerStyle: { backgroundColor: 'purple' }, headerTintColor: 'white', drawerStyle: { backgroundColor: '#F0EDED' } }}>
-
-      <Drawer.Screen name="Home" component={HomeScreen} options={{
-        headerTitle: 'Geek-Shop', drawerActiveTintColor: 'black', headerRight: () => <TouchableWithoutFeedback onPress={handleUserAuth}>
-
-          {usertoken.access ? <Text style={{ color: 'white', fontSize: 18, paddingRight: 20, fontWeight: 'bold' }}>Dashboard</Text> : <Text style={{ color: 'white', fontSize: 18, paddingRight: 20, fontWeight: 'bold' }}>Login</Text>}
-
-        </TouchableWithoutFeedback>
-      }} />
-
+    <Drawer.Navigator
+      // 🚫 Removed useLegacyImplementation — not supported in Reanimated 3+
+      screenOptions={{
+        headerStyle: { backgroundColor: 'purple' },
+        headerTintColor: 'white',
+        drawerStyle: { backgroundColor: '#F0EDED' },
+      }}
+    >
+      <Drawer.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerTitle: 'Geek-Shop',
+          drawerActiveTintColor: 'black',
+          headerRight: () => (
+            <TouchableWithoutFeedback onPress={handleUserAuth}>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 18,
+                  paddingRight: 20,
+                  fontWeight: 'bold',
+                }}
+              >
+                {userToken.access ? 'Dashboard' : 'Login'}
+              </Text>
+            </TouchableWithoutFeedback>
+          ),
+        }}
+      />
     </Drawer.Navigator>
-  )
-}
+  );
+};
 
-export default ShopTab
+export default ShopTab;

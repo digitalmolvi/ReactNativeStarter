@@ -1,9 +1,10 @@
-## React Native Starter Dashboard UI
+## React Native Complete Authentication and Dashboard UI
+### Video Link:- https://youtu.be/yne9nC-CPas
 
 ## To Run this Project via NPM follow below:
 
 ```bash
-yarn install
-yarn start
+npm install
+npm start
 ```
 
